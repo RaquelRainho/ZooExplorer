@@ -64,8 +64,24 @@ class _HabitatsState extends State<HabitatsPage> {
           });
         },
       ),
-        body: Center(
-          child: Text('Habitats'),
+      body: ListView(
+        children: ListTile.divideTiles(
+          context: context,
+          tiles: [
+            ListTile(
+              title: Text('Habitat 4'),
+              subtitle: Text('Giraffes'),
+            ),
+            ListTile(
+              title: Text('Habitat 7'),
+              subtitle: Text('Lions'),
+            ),
+            ListTile(
+              title: Text('Habitat 8'),
+              subtitle: Text('Zebras'),
+            ),
+          ]
+        ).toList(),
         ),
       ),
     );

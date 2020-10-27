@@ -19,7 +19,7 @@ class ZooMapPage extends StatefulWidget {
 class _ZooMapState extends State<ZooMapPage> {
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(40.636379, -8.653336);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -73,11 +73,11 @@ class _ZooMapState extends State<ZooMapPage> {
           });
         },
       ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
+      body: GoogleMap(
+        onMapCreated: _onMapCreated,
+        initialCameraPosition: CameraPosition(
+          target: _center,
+          zoom: 11.0,
           ),
         ),
       ),
