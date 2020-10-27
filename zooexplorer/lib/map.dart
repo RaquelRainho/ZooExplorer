@@ -1,43 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:zooexplorer/habitats.dart';
-import 'package:zooexplorer/map.dart';
-//import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void main() => runApp(MyApp());
-
-/// This is the main application widget.
-class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
-
-  @override
+class ZooMap extends StatelessWidget {
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      //home: MyStatefulWidget(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyStatefulWidget(),
-        '/map': (context) => ZooMap(),
-        '/habitats': (context) => Habitats(),
-      },
+    return Scaffold(
+      body: ZooMapPage(),
     );
   }
 }
 
-/// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+class ZooMapPage extends StatefulWidget {
+  ZooMapPage({Key key}) : super(key: key);
 
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _ZooMapState createState() => _ZooMapState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+class _ZooMapState extends State<ZooMapPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
         title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -79,6 +62,17 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             }
           });
         },
+      ),
+        body: Center(
+          child: Text('Mapa'),
+        ),
+        // body: GoogleMap(
+        //   onMapCreated: _onMapCreated,
+        //   initialCameraPosition: CameraPosition(
+        //     target: _center,
+        //     zoom: 11.0,
+        //   ),
+        // ),
       ),
     );
   }
