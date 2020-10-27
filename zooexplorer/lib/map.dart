@@ -77,7 +77,7 @@ class _ZooMapState extends State<ZooMapPage> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: _center,
-          zoom: 11.0,
+          zoom: 16.5,
           ),
         ),
       ),

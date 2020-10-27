@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
-class Habitats extends StatelessWidget {
+class HabitatInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
-      body: HabitatsPage(),
+      body: HabitatInfoPage(),
     );
   }
 }
 
-class HabitatsPage extends StatefulWidget {
-  HabitatsPage({Key key}) : super(key: key);
+class HabitatInfoPage extends StatefulWidget {
+  HabitatInfoPage({Key key}) : super(key: key);
 
   @override
-  _HabitatsState createState() => _HabitatsState();
+  _HabitatInfoState createState() => _HabitatInfoState();
 }
 
-class _HabitatsState extends State<HabitatsPage> {
+class _HabitatInfoState extends State<HabitatInfoPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -64,28 +64,7 @@ class _HabitatsState extends State<HabitatsPage> {
           });
         },
       ),
-      body: ListView(
-        children: ListTile.divideTiles(
-          context: context,
-          tiles: [
-            ListTile(
-              title: Text('Habitat 4'),
-              subtitle: Text('Giraffes'),
-              onTap: () { Navigator.pushNamed(context, '/habitat-info'); },
-            ),
-            ListTile(
-              title: Text('Habitat 7'),
-              subtitle: Text('Lions'),
-              onTap: () { Navigator.pushNamed(context, '/habitat-info'); },
-            ),
-            ListTile(
-              title: Text('Habitat 8'),
-              subtitle: Text('Zebras'),
-              onTap: () { Navigator.pushNamed(context, '/habitat-info'); },
-            ),
-          ]
-        ).toList(),
-        ),
+      body: Text('Habitat info')
       ),
     );
   }

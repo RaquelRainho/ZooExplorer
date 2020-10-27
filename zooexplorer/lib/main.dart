@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zooexplorer/habitat_info.dart';
 import 'package:zooexplorer/habitats.dart';
 import 'package:zooexplorer/map.dart';
 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => MyStatefulWidget(),
         '/map': (context) => ZooMap(),
         '/habitats': (context) => Habitats(),
+        '/habitat-info': (context) => HabitatInfo(),
       },
     );
   }
