@@ -50,6 +50,7 @@ class _HabitatsState extends State<HabitatsPage> {
           ),
         ],
         selectedItemColor: Colors.green[600],
+        currentIndex: 1,
         onTap: (int index) {
           setState(() {
             switch(index) {
