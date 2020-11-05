@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class Habitats extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -16,6 +17,16 @@ class HabitatsPage extends StatefulWidget {
 }
 
 class _HabitatsState extends State<HabitatsPage> {
+  String scanResult = '';
+  //function that launches the scanner
+  Future scanQRCode() async {
+    String cameraScanResult = await scanner.scan();
+      setState(() {
+      scanResult = cameraScanResult;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -83,9 +94,19 @@ class _HabitatsState extends State<HabitatsPage> {
               subtitle: Text('Zebras'),
               onTap: () { Navigator.pushNamed(context, '/habitat-info'); },
             ),
+            ListTile(
+              title: Text('Habitat 15'),
+              subtitle: scanResult == '' ? Text('Result will be displayed here') : Text(scanResult),
+              onTap: () { Navigator.pushNamed(context, '/habitat-info'); },
+            ),
+            
           ]
         ).toList(),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){scanQRCode();},
+          backgroundColor: Colors.green[400],
+          child: Icon(Icons.qr_code),),
       ),
     );
   }
