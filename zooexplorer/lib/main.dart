@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zooexplorer/habitat_info.dart';
-import 'package:zooexplorer/habitats.dart';
-import 'package:zooexplorer/map.dart';
+import 'package:zooexplorer/habitats/habitat_info.dart';
+import 'package:zooexplorer/habitats/habitats.dart';
+import 'package:zooexplorer/map/map.dart';
 
 void main() => runApp(MyApp());
 

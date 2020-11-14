@@ -44,7 +44,7 @@ class _HabitatsState extends State<HabitatsPage> {
                   padding: const EdgeInsets.all(8.0), child: Text('Zoo Explorer'))
             ],
           ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[900],
         centerTitle: true,
 
       ),
