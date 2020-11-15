@@ -1,11 +1,14 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:background_app_bar/background_app_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/gallery.dart';
 import 'package:zooexplorer/habitats/info.dart';
+import 'package:zooexplorer/models/habitat.dart';
 
-class HabitatInfo extends StatelessWidget {
+/* class HabitatInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
@@ -14,16 +17,20 @@ class HabitatInfo extends StatelessWidget {
       home: HabitatInfoPage(),
     );
   }
-}
+} */
 
-class HabitatInfoPage extends StatefulWidget {
-  HabitatInfoPage({Key key}) : super(key: key);
+class HabitatInfo extends StatefulWidget {
+  final int id;
+
+  HabitatInfo({Key key, this.id}) : super(key: key);
+
+  //HabitatInfo({this.id});
 
   @override
   _HabitatInfoState createState() => _HabitatInfoState();
 }
 
-class _HabitatInfoState extends State<HabitatInfoPage> with SingleTickerProviderStateMixin{
+class _HabitatInfoState extends State<HabitatInfo> with SingleTickerProviderStateMixin{
 ScrollController _controller;
   TabController _tabController;
   
@@ -86,7 +93,12 @@ ScrollController _controller;
 
   @override
   Widget build(BuildContext context) {
+    List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+
     return MaterialApp(
+      theme: ThemeData(
+        backgroundColor: Colors.green,
+      ),
       home: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -114,7 +126,7 @@ ScrollController _controller;
                   floating: false,
                   snap: false,
                   flexibleSpace: BackgroundFlexibleSpaceBar(
-                        title: Text( "Habitat 01" ),
+                        title: Text( "Habitat " + "${habitats[widget.id].id}" ),
                         centerTitle: true,
                         titlePadding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
                         background: ClipRect(
@@ -152,8 +164,8 @@ ScrollController _controller;
           body: TabBarView(
                   controller: _tabController,
                   children: <Widget>[
-                    Center(child: InfoPage(),),
-                    Center(child: GalleryPage()),
+                    Center(child: InfoPage(id: widget.id),),
+                    Center(child: GalleryPage(id: widget.id)),
                   ],
                 ),
         ),

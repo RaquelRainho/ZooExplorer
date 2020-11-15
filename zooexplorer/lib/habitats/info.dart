@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zooexplorer/models/habitat.dart';
+import 'package:zooexplorer/presentation/custom_icons.dart';
 
 class InfoPage extends StatelessWidget {
+  final int id;
+  InfoPage({this.id});
+
   @override
   Widget build(BuildContext context) {
+    List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+
     return Container( 
       color: Colors.grey[300],
       child: ListView(
@@ -44,7 +52,7 @@ class InfoPage extends StatelessWidget {
                     ),
                       Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Habitat 01", textAlign: TextAlign.center,
+                        child: Text(habitats[id].species, textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -58,7 +66,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Europe", textAlign: TextAlign.center,
+                        child: Text(habitats[id].binName, textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -72,7 +80,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("3", textAlign: TextAlign.center,
+                        child: Text(habitats[id].consStatus, textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -86,7 +94,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("3", textAlign: TextAlign.center,
+                        child: Text(habitats[id].diet, textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -100,7 +108,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("3", textAlign: TextAlign.center,
+                        child: Text(habitats[id].natHabitat, textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -144,7 +152,7 @@ class InfoPage extends StatelessWidget {
                     ),
                       Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Habitat 01", textAlign: TextAlign.center,
+                        child: Text(habitats[id].offsprings.toString(), textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -158,7 +166,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Europe", textAlign: TextAlign.center,
+                        child: Text(habitats[id].matAge.toString(), textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -172,7 +180,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("3", textAlign: TextAlign.center,
+                        child: Text(habitats[id].gestPeriod.toString(), textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -216,8 +224,25 @@ class InfoPage extends StatelessWidget {
                     ),
                       Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Habitat 01", textAlign: TextAlign.center,
-                      ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.female, color: Colors.pink, size: 20,),
+                                Text(habitats[id].f_size.toString(),),
+                                ],)
+                            ]),
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.male, color: Colors.blue, size: 20,),
+                                Text(habitats[id].m_size.toString(),)],
+                                )],
+                              ),
+                          ]),
                     ),
                     ]
                   ),
@@ -230,8 +255,25 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("Europe", textAlign: TextAlign.center,
-                      ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.female, color: Colors.pink, size: 20,),
+                                Text(habitats[id].f_lifeExpectancy.toString(),),
+                                ],)
+                            ]),
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.male, color: Colors.blue, size: 20,),
+                                Text(habitats[id].m_lifeExpectancy.toString(),)],
+                                )],
+                              ),
+                          ]),
                     ),
                     ]
                   ),
@@ -244,8 +286,25 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text("3", textAlign: TextAlign.center,
-                      ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.female, color: Colors.pink, size: 20,),
+                                Text(habitats[id].f_weight.toString(),),
+                                ],)
+                            ]),
+                            Column(
+                              children: [
+                                Row(children: [
+                                Icon(Custom.male, color: Colors.blue, size: 20,),
+                                Text(habitats[id].m_weight.toString(),)],
+                                )],
+                              ),
+                          ]),
                     ),
                     ]
                   ),

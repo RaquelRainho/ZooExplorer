@@ -1,22 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:zooexplorer/models/habitat.dart';
+import 'package:zooexplorer/services/database.dart';
+import 'package:provider/provider.dart';
+import 'package:zooexplorer/habitats/habitat_list.dart';
 
-class Habitats extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: HabitatsPage(),
-    );
-  }
-}
+import 'habitat_info.dart';
 
-class HabitatsPage extends StatefulWidget {
-  HabitatsPage({Key key}) : super(key: key);
+class Habitats extends StatefulWidget {
+  Habitats({Key key}) : super(key: key);
 
   @override
   _HabitatsState createState() => _HabitatsState();
 }
 
-class _HabitatsState extends State<HabitatsPage> {
+class _HabitatsState extends State<Habitats> {
   String scanResult = '';
   //function that launches the scanner
   Future scanQRCode() async {
@@ -29,6 +28,8 @@ class _HabitatsState extends State<HabitatsPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+    
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -75,7 +76,42 @@ class _HabitatsState extends State<HabitatsPage> {
           });
         },
       ),
-      body: ListView(
+      body: (habitats != null)? ListView.builder(
+        itemCount: habitats.length,
+        itemBuilder: (BuildContext context, int index){
+          return ListTile(
+              title: Text(habitats[index].binName),
+              onTap: (){
+                //Navigator.pushNamed(this.context, '/habitat-info');
+                Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index)));
+              },
+            );
+        }
+      ): Center(child: CircularProgressIndicator(),),
+      /* StreamBuilder<QuerySnapshot>(
+      stream: DatabaseService().habitats,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+        if(snapshot.hasError){
+          return Center(child: Text("Something went wrong"));
+        }
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Center(child: CircularProgressIndicator());
+        }
+        
+        return ListView(
+          children: snapshot.data.docs.map((DocumentSnapshot doc) {
+            return ListTile(
+              title: Text(doc.data()['name']),
+              onTap: (){
+                //Navigator.pushNamed(this.context, '/habitat-info');
+                Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(doc)));
+              },
+            );
+          }).toList(),
+        );
+      },
+    ), */
+      /*body: ListView(
         children: ListTile.divideTiles(
           context: context,
           tiles: [
@@ -102,7 +138,7 @@ class _HabitatsState extends State<HabitatsPage> {
             
           ]
         ).toList(),
-        ),
+        ),*/
         floatingActionButton: FloatingActionButton(
           onPressed: (){scanQRCode();},
           backgroundColor: Colors.green[400],

@@ -1,9 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/habitats/habitats.dart';
 import 'package:zooexplorer/map/map.dart';
+import 'package:zooexplorer/models/habitat.dart';
+import 'package:zooexplorer/services/database.dart';
 
-void main() => runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 /// This is the main application widget.
 class MyApp extends StatelessWidget {
@@ -11,16 +20,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      //home: MyStatefulWidget(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyStatefulWidget(),
-        '/map': (context) => ZooMap(),
-        '/habitats': (context) => Habitats(),
-        '/habitat-info': (context) => HabitatInfo(),
-      },
+    return StreamProvider<List<Habitat>>.value(
+      value: DatabaseService().habitats,
+      child: MaterialApp(
+        title: _title,
+        //home: MyStatefulWidget(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => MyStatefulWidget(),
+          '/map': (context) => ZooMap(),
+          '/habitats': (context) => Habitats(),
+        },
+      ),
     );
   }
 }
@@ -54,7 +65,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               color: Colors.green[900],
               textColor: Colors.grey[350],
               onPressed: () {
-                Navigator.pushNamed(context, '/map');
+                Navigator.pushNamed(context, '/habitats');
                 },
             ),
           ],
