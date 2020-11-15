@@ -29,6 +29,8 @@ dependencies:
   qrscan: ^0.2.17
   cloud_firestore: ^0.14.2
   background_app_bar: ^1.0.0
+  provider: ^4.3.2+2
+  firebase_core : ^0.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -80,3 +82,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family:  Custom
+      fonts:
+       - asset: fonts/Custom.ttf

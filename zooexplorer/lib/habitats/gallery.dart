@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class GalleryPage extends StatefulWidget {
+  final int id;
+  GalleryPage({this.id});
+
   @override
   _GalleryPageState createState() => _GalleryPageState();
 }
