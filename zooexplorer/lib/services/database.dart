@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zooexplorer/models/habitat.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class DatabaseService {
 
-  final String id;
-  DatabaseService({this.id});
-
   // collection reference
   final CollectionReference habitatCollection = FirebaseFirestore.instance.collection('habitats');
+
+  // storage instance
+  final FirebaseStorage storage = FirebaseStorage.instanceFor(bucket: "gs://cm-zoo-explorer.appspot.com");
 
   // get habitats stream
   Stream<List<Habitat>> get habitats{
@@ -31,22 +32,29 @@ class DatabaseService {
                                                     matAge: documentSnapshot.data()["matAge"],
                                                     natHabitat: documentSnapshot.data()["natHabitat"],
                                                     offsprings: documentSnapshot.data()["offsprings"],
-                                                    species: documentSnapshot.data()["species"])
+                                                    species: documentSnapshot.data()["species"],
+                                                    imageUrl: documentSnapshot.data()["imageUrl"],
+                                                    photoCollection: documentSnapshot.data()["photos"]),
                                                   )
       .toList()
     );
   }
 
-/*   Future getHabitats() async{
-    try{
-      await habitatCollection.get().then((querySnapshot) {
-        print(querySnapshot.docs);
-      }
-      );
-    }catch(e){
-      print(e.toString());
-      return null;
-    }
-  } */
+  // get storage reference
+  Reference get storageReference{
+    return storage.ref();
+  }
 
+  // get the list of photos of an habitat
+  Future<List<String>> photos(String id){
+    final Reference storRef = storage.ref().child('photos').child(id);
+    storRef.listAll().then((ListResult list){
+        return list.items.map((Reference ref){
+            ref.fullPath;
+            print(ref.fullPath);
+          }
+        ).toList();
+      }
+    );
+  }
 }

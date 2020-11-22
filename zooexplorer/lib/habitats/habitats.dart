@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:zooexplorer/models/habitat.dart';
-import 'package:zooexplorer/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:zooexplorer/habitats/habitat_list.dart';
 
 import 'habitat_info.dart';
 
@@ -17,6 +16,8 @@ class Habitats extends StatefulWidget {
 
 class _HabitatsState extends State<Habitats> {
   String scanResult = '';
+  Uint8List imageBytes;
+
   //function that launches the scanner
   Future scanQRCode() async {
     String cameraScanResult = await scanner.scan();
@@ -24,7 +25,6 @@ class _HabitatsState extends State<Habitats> {
       scanResult = cameraScanResult;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +79,43 @@ class _HabitatsState extends State<Habitats> {
       body: (habitats != null)? ListView.builder(
         itemCount: habitats.length,
         itemBuilder: (BuildContext context, int index){
-          return ListTile(
+          return Card(
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index)));
+              },
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                children: [
+                  Ink.image(
+                    //colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                    height: 120,
+                    image: AssetImage(habitats[index].imageUrl),
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all( 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Habitat " + habitats[index].id, style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 26.0, fontWeight: FontWeight.bold),),
+                        Text(habitats[index].binName + "s", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+           /* ListTile(
               title: Text(habitats[index].binName),
               onTap: (){
                 //Navigator.pushNamed(this.context, '/habitat-info');
                 Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index)));
               },
-            );
+            ); */
         }
       ): Center(child: CircularProgressIndicator(),),
       /* StreamBuilder<QuerySnapshot>(

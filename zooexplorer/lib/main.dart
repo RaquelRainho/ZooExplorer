@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
@@ -20,18 +21,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<Habitat>>.value(
-      value: DatabaseService().habitats,
-      child: MaterialApp(
-        title: _title,
-        //home: MyStatefulWidget(),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => MyStatefulWidget(),
-          '/map': (context) => ZooMap(),
-          '/habitats': (context) => Habitats(),
-        },
-      ),
+    return MultiProvider(
+        providers: [
+          StreamProvider<List<Habitat>>.value(
+                value: DatabaseService().habitats,),
+          Provider<Reference>.value(value: DatabaseService().storageReference),
+        ],
+        child: MaterialApp(
+          title: _title,
+          //home: MyStatefulWidget(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => MyStatefulWidget(),
+            '/map': (context) => ZooMap(),
+            '/habitats': (context) => Habitats(),
+          },
+        ),
     );
   }
 }

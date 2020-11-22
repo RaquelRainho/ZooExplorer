@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Habitat{
@@ -17,6 +18,8 @@ class Habitat{
   String natHabitat;
   int offsprings;
   String species;
+  String imageUrl;
+  CollectionReference photoCollection;
   
 
   Habitat({
@@ -36,5 +39,7 @@ class Habitat{
     this.natHabitat,
     this.offsprings,
     this.species,
+    this.imageUrl,
+    this.photoCollection,
     });
 }

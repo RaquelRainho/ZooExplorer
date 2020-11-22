@@ -135,7 +135,7 @@ ScrollController _controller;
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(
-                                            "assets/lion.jpg",
+                                            habitats[widget.id].imageUrl,
                                         ),
                                         fit: BoxFit.fitWidth
                           )
