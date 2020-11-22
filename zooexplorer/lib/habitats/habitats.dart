@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:zooexplorer/models/habitat.dart';
 import 'package:provider/provider.dart';
@@ -15,20 +16,25 @@ class Habitats extends StatefulWidget {
 }
 
 class _HabitatsState extends State<Habitats> {
-  String scanResult = '';
   Uint8List imageBytes;
+  final LocalStorage storage = new LocalStorage('habitats');
+  List<dynamic> unlockedHabitats;
 
   //function that launches the scanner
   Future scanQRCode() async {
     String cameraScanResult = await scanner.scan();
       setState(() {
-      scanResult = cameraScanResult;
+        unlockedHabitats = storage.getItem("unlocked") ?? List<String>();
+        unlockedHabitats.add(cameraScanResult);
+        storage.setItem("unlocked", unlockedHabitats);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+    unlockedHabitats = storage.getItem("unlocked") ?? List<String>();
+    // habitats.sort((a,b) {return unlockedHabitats.contains(a.id) ? 0 : 1;});
     
     return MaterialApp(
       home: Scaffold(
@@ -37,17 +43,16 @@ class _HabitatsState extends State<Habitats> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                   Image.asset(
-                 'assets/logo_short2.png',
-                  fit: BoxFit.contain,
-                  height: 48,
-              ),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('Zoo Explorer'))
+                    'assets/logo_short2.png',
+                      fit: BoxFit.contain,
+                      height: 48,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0), child: Text('Zoo Explorer')),
             ],
           ),
         backgroundColor: Colors.green[900],
         centerTitle: true,
-
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -84,13 +89,13 @@ class _HabitatsState extends State<Habitats> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: InkWell(
               onTap: () {
-                Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index)));
+                unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index))) : null;
               },
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Ink.image(
-                    //colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                    colorFilter: unlockedHabitats.contains(habitats[index].id) ? null : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                     height: 120,
                     image: AssetImage(habitats[index].imageUrl),
                     fit: BoxFit.fitWidth,
@@ -101,7 +106,7 @@ class _HabitatsState extends State<Habitats> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Habitat " + habitats[index].id, style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 26.0, fontWeight: FontWeight.bold),),
-                        Text(habitats[index].binName + "s", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
+                        Text(unlockedHabitats.contains(habitats[index].id) ? habitats[index].binName + "s" : "[visit to unlock]", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
                       ],
                     ),
                   ),
