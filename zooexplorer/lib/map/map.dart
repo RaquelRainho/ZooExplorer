@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ZooMap extends StatelessWidget {
@@ -17,12 +18,43 @@ class ZooMapPage extends StatefulWidget {
 }
 
 class _ZooMapState extends State<ZooMapPage> {
-  GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(40.636379, -8.653336);
+  Map<int, LatLng> habitats = {0: LatLng(40.633428, -8.658037),
+                                1: LatLng(40.634462, -8.656953),
+                                2: LatLng(40.634845, -8.657393)};
+  Set<Marker> _markers = {};
+  BitmapDescriptor pinLocationIcon;
+
+  GoogleMapController _mapController;
+  final LatLng _center = const LatLng(40.633528, -8.657161);
+  final double _zoom = 16.5;
+  
+  @override
+  void initState() {
+    super.initState();
+    BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/animal-marker.png").then((onValue) {
+      pinLocationIcon = onValue;
+    });
+  }
 
   void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+    _mapController = controller;
+    rootBundle.loadString('assets/map_style.json').then((String mapStyle) {
+      _mapController.setMapStyle(mapStyle);
+    });
+    setState(() {
+      habitats.forEach((key, value) {
+        _markers.add(
+          Marker(markerId: MarkerId(key.toString()), 
+                  position: value,
+                  infoWindow: InfoWindow(title: "Habitat " + key.toString() + "\tⓘ", 
+                                          snippet: "Lions", 
+                                          onTap: 1>1 ? null : null),
+                  icon: pinLocationIcon,
+                  alpha: key>1 ? 0.5 : 1.0
+                ));
+      });
+    });
   }
 
   @override
@@ -77,8 +109,11 @@ class _ZooMapState extends State<ZooMapPage> {
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: _center,
-          zoom: 16.5,
+          zoom: _zoom,
           ),
+          myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          markers: _markers,
         ),
       ),
     );
