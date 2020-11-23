@@ -48,10 +48,10 @@ class DatabaseService {
   // get the list of photos of an habitat
   Future<List<String>> photos(String id){
     final Reference storRef = storage.ref().child('photos').child(id);
-    storRef.listAll().then((ListResult list){
+    return storRef.listAll().then((ListResult list){
         return list.items.map((Reference ref){
-            ref.fullPath;
-            print(ref.fullPath);
+            return ref.fullPath;
+            //print(ref.fullPath);
           }
         ).toList();
       }
