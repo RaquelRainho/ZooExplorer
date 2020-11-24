@@ -17,26 +17,49 @@ class _IntroTutorialState extends State<IntroTutorial> {
     _slides.add(
       new Slide(
         title: "MAP",
-        description: "Allow miles wound place the leave had. To sitting subject no improve studied limited",
-        //pathImage: "images/photo_eraser.png",
-        backgroundColor: Color(0xfff5a623),
+        styleTitle: TextStyle(color: Colors.green[900], fontSize: 40.0, fontWeight: FontWeight.bold),
+        description: "Use the map to see where you are and locate the animal habitats!",
+        styleDescription: TextStyle(color: Colors.green[900], fontSize: 20.0),
+        pathImage: "assets/intro_map.png",
+        backgroundColor: Colors.white,
       ),
     );
     _slides.add(
       new Slide(
-        title: "PENCIL",
-        description: "Ye indulgence unreserved connection alteration appearance",
-        //pathImage: "images/photo_pencil.png",
-        backgroundColor: Color(0xff203152),
+        title: "HABITATS",
+        styleTitle: TextStyle(color: Colors.green[900], fontSize: 40.0, fontWeight: FontWeight.bold),
+        description: "In the habitats tab you can see the habitats of the zoo.\nVisit one and use the QR code scanner to unlock it!",
+        styleDescription: TextStyle(color: Colors.green[900], fontSize: 20.0),
+        pathImage: "assets/intro_list.png",
+        backgroundColor: Colors.white,
       ),
     );
     _slides.add(
       new Slide(
-        title: "RULER",
-        description:
-        "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        //pathImage: "images/photo_ruler.png",
-        backgroundColor: Color(0xff9932CC),
+        title: "HABITAT",
+        styleTitle: TextStyle(color: Colors.green[900], fontSize: 40.0, fontWeight: FontWeight.bold),
+        description: "Once unlocked, you can see the habitat's page to find the information about the animal inside!",
+        styleDescription: TextStyle(color: Colors.green[900], fontSize: 20.0),
+        pathImage: "assets/intro_info.png",
+        backgroundColor: Colors.white,
+      ),
+    );
+    _slides.add(
+      new Slide(
+        title: "GALLERY",
+        styleTitle: TextStyle(color: Colors.green[900], fontSize: 40.0, fontWeight: FontWeight.bold),
+        description: "On each habitat's page, you can also see its photo gallery and upload your own!",
+        styleDescription: TextStyle(color: Colors.green[900], fontSize: 20.0),
+        pathImage: "assets/intro_photos.png",
+        backgroundColor: Colors.white,
+      ),
+    );
+    _slides.add(
+      new Slide(
+        description: "WELCOME!",
+        styleDescription: TextStyle(color: Colors.green[900], fontSize: 25.0),
+        pathImage: "assets/logo.png",
+        backgroundColor: Colors.white,
       ),
     );
   }
@@ -48,6 +71,9 @@ class _IntroTutorialState extends State<IntroTutorial> {
       onDonePress: () {
         Navigator.pushNamed(context, '/habitats');
         },
+        styleNameDoneBtn: TextStyle(color: Colors.green[900]),
+        styleNamePrevBtn: TextStyle(color: Colors.green[900]),
+        styleNameSkipBtn: TextStyle(color: Colors.green[900]),
     );
   }
 }
