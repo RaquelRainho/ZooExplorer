@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
+import 'package:zooexplorer/habitats/habitat_info.dart';
+import 'package:zooexplorer/models/habitat.dart';
 
+/*
 class ZooMap extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,19 +14,22 @@ class ZooMap extends StatelessWidget {
     );
   }
 }
+*/
 
-class ZooMapPage extends StatefulWidget {
-  ZooMapPage({Key key}) : super(key: key);
+class ZooMap extends StatefulWidget {
+  final LatLng initialPos;
+
+  ZooMap({Key key, this.initialPos}) : super(key: key);
 
   @override
   _ZooMapState createState() => _ZooMapState();
 }
 
-class _ZooMapState extends State<ZooMapPage> {
+class _ZooMapState extends State<ZooMap> {
 
-  Map<int, LatLng> habitats = {0: LatLng(40.633428, -8.658037),
-                                1: LatLng(40.634462, -8.656953),
-                                2: LatLng(40.634845, -8.657393)};
+  List<Habitat> _habitats = List();
+  List<dynamic> _unlockedHabitats = List();
+  final LocalStorage _storage = new LocalStorage('habitats');
   Set<Marker> _markers = {};
   BitmapDescriptor pinLocationIcon;
 
@@ -43,15 +51,17 @@ class _ZooMapState extends State<ZooMapPage> {
       _mapController.setMapStyle(mapStyle);
     });
     setState(() {
-      habitats.forEach((key, value) {
+      _markers.clear();
+      _unlockedHabitats = _storage.getItem("unlocked") ?? List<String>();
+      _habitats.forEach((element) {
         _markers.add(
-          Marker(markerId: MarkerId(key.toString()), 
-                  position: value,
-                  infoWindow: InfoWindow(title: "Habitat " + key.toString() + "\tⓘ", 
-                                          snippet: "Lions", 
-                                          onTap: 1>1 ? null : null),
+          Marker(markerId: MarkerId(element.id), 
+                  position: element.location,
+                  infoWindow: InfoWindow(title: "Habitat " + element.id + "\tⓘ", 
+                                          snippet: element.binName + "s", 
+                                          onTap: (){_unlockedHabitats.contains(element.id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: int.parse(element.id)-1))) : null;}),
                   icon: pinLocationIcon,
-                  alpha: key>1 ? 0.5 : 1.0
+                  alpha: _unlockedHabitats.contains(element.id) ? 1.0 : 0.5,
                 ));
       });
     });
@@ -59,6 +69,7 @@ class _ZooMapState extends State<ZooMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    _habitats = Provider.of<List<Habitat>>(context);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -108,7 +119,7 @@ class _ZooMapState extends State<ZooMapPage> {
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
-          target: _center,
+          target: widget.initialPos,
           zoom: _zoom,
           ),
           myLocationEnabled: true,

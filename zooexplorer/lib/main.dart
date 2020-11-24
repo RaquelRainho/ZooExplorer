@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/habitats/habitats.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {
             '/': (context) => MyStatefulWidget(),
-            '/map': (context) => ZooMap(),
+            '/map': (context) => ZooMap(initialPos: LatLng(40.633528, -8.657161)),
             '/habitats': (context) => Habitats(),
           },
         ),

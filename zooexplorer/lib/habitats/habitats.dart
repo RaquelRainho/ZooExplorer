@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:zooexplorer/map/map.dart';
 import 'package:zooexplorer/models/habitat.dart';
 import 'package:provider/provider.dart';
 
@@ -17,24 +18,22 @@ class Habitats extends StatefulWidget {
 
 class _HabitatsState extends State<Habitats> {
   Uint8List imageBytes;
-  final LocalStorage storage = new LocalStorage('habitats');
-  List<dynamic> unlockedHabitats;
+  final LocalStorage _storage = new LocalStorage('habitats');
+  List<dynamic> _unlockedHabitats = List();
 
   //function that launches the scanner
   Future scanQRCode() async {
     String cameraScanResult = await scanner.scan();
-      setState(() {
-        unlockedHabitats = storage.getItem("unlocked") ?? List<String>();
-        unlockedHabitats.add(cameraScanResult);
-        storage.setItem("unlocked", unlockedHabitats);
-    });
+    _unlockedHabitats = _storage.getItem("unlocked") ?? List<String>();
+    _unlockedHabitats.add(cameraScanResult);
+    _storage.setItem("unlocked", _unlockedHabitats).then((value) => setState((){}));
   }
 
   @override
   Widget build(BuildContext context) {
     List<Habitat> habitats = Provider.of<List<Habitat>>(context);
-    unlockedHabitats = storage.getItem("unlocked") ?? List<String>();
-    // habitats.sort((a,b) {return unlockedHabitats.contains(a.id) ? 0 : 1;});
+    _unlockedHabitats = _storage.getItem("unlocked") ?? List<String>();
+    // habitats.sort((a,b) {return _unlockedHabitats.contains(a.id) ? 0 : 1;});
     
     return MaterialApp(
       home: Scaffold(
@@ -81,7 +80,7 @@ class _HabitatsState extends State<Habitats> {
           });
         },
       ),
-      body: (habitats != null)? ListView.builder(
+      body: (habitats != null) ? ListView.builder(
         itemCount: habitats.length,
         itemBuilder: (BuildContext context, int index){
           return Card(
@@ -89,13 +88,14 @@ class _HabitatsState extends State<Habitats> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: InkWell(
               onTap: () {
-                unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index))) : null;
+                //Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZooMap(initialPos: habitats[index].location)));
+                _unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index))) : null;
               },
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 children: [
                   Ink.image(
-                    colorFilter: unlockedHabitats.contains(habitats[index].id) ? null : ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                    colorFilter: _unlockedHabitats.contains(habitats[index].id) ? null : ColorFilter.mode(Colors.grey, BlendMode.saturation),
                     height: 120,
                     image: AssetImage(habitats[index].imageUrl),
                     fit: BoxFit.fitWidth,
@@ -106,7 +106,7 @@ class _HabitatsState extends State<Habitats> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Habitat " + habitats[index].id, style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 26.0, fontWeight: FontWeight.bold),),
-                        Text(unlockedHabitats.contains(habitats[index].id) ? habitats[index].binName + "s" : "[visit to unlock]", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
+                        Text(_unlockedHabitats.contains(habitats[index].id) ? habitats[index].binName + "s" : "[visit to unlock]", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
                       ],
                     ),
                   ),
@@ -122,7 +122,7 @@ class _HabitatsState extends State<Habitats> {
               },
             ); */
         }
-      ): Center(child: CircularProgressIndicator(),),
+      ) : Center(child: CircularProgressIndicator(),),
       /* StreamBuilder<QuerySnapshot>(
       stream: DatabaseService().habitats,
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
