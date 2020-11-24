@@ -3,9 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/habitats/habitats.dart';
+import 'package:zooexplorer/intro/intro_slider.dart';
 import 'package:zooexplorer/map/map.dart';
 import 'package:zooexplorer/models/habitat.dart';
 import 'package:zooexplorer/services/database.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           routes: {
             '/': (context) => MyStatefulWidget(),
-            '/map': (context) => ZooMap(initialPos: LatLng(40.633528, -8.657161)),
+            '/map': (context) => ZooMap(initialPos: LatLng(40.63191945636097, -8.657524065137872)),
             '/habitats': (context) => Habitats(),
           },
         ),
@@ -52,8 +54,14 @@ class MyStatefulWidget extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  final LocalStorage _storage = new LocalStorage('preferences');
+  bool _firstTime = true;
+  
   @override
   Widget build(BuildContext context) {
+    _firstTime = _storage.getItem('first_time') ?? true;
+    return _firstTime ? IntroTutorial() : Habitats();
+    /*
     return Scaffold(
       body: Center(
         child: Column(
@@ -78,5 +86,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         ),
       )
     );
+    */
   }
 }
