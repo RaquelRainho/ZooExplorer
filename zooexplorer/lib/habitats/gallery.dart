@@ -1,13 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/models/habitat.dart';
 import 'package:zooexplorer/services/database.dart';
+
+import 'image.dart';
 
 class GalleryPage extends StatefulWidget {
   final int id;
@@ -65,10 +67,6 @@ class _GalleryPageState extends State<GalleryPage> {
     );
   }
 
-  Future<QuerySnapshot> getImages(Habitat habitat){
-    return habitat.photoCollection.get();
-  }
-
   Future<void> _pickImage(Reference storage, Habitat habitat) async {
     UploadTask _uploadTask;
     String filePath = 'photos/${habitat.id}/${DateTime.now()}.jpg';
@@ -76,15 +74,32 @@ class _GalleryPageState extends State<GalleryPage> {
 
     PickedFile selected = await imagePicker.getImage(source: ImageSource.camera);
     File image = File(selected.path);
+    image.length().then((value) => print("Before compression: $value"));
+    File compressedFile = await compressImage(image);
+    compressedFile.length().then((value) => print("After compression: $value"));
 
-    _uploadTask = storage.child(filePath).putFile(image);
+    _uploadTask = storage.child(filePath).putFile(compressedFile);
     _uploadTask.then((data) => 
     setState(() {
       })
     );
-
-    
   }
+
+  Future<File> compressImage(File file) async{
+    final _filePath = file.absolute.path;
+
+    final lastIndex = _filePath.lastIndexOf(new RegExp(r'.jp'));
+    final splitted = _filePath.substring(0, (lastIndex));
+    final outPath = "${splitted}_out${_filePath.substring(lastIndex)}";
+
+    File compressed = await FlutterImageCompress.compressAndGetFile(
+        _filePath,
+        outPath,
+        minWidth: 1000,
+        minHeight: 1000,
+        quality: 70);
+    return compressed;
+    }
 }
 
 class ImageGridTile extends StatefulWidget {
@@ -115,7 +130,12 @@ class _ImageGridTileState extends State<ImageGridTile> {
     if(imageFile == null){
       return Center(child: CircularProgressIndicator(),);
     }else{
-      return Image.memory(imageFile, fit: BoxFit.cover);
+      return GestureDetector(
+        onTap: (){
+          Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZoomImage(img: imageFile)));
+        },
+        child: Image.memory(imageFile, fit: BoxFit.cover)
+        );
     }
   }
 
