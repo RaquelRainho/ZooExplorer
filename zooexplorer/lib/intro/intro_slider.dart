@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:localstorage/localstorage.dart';
 
 class IntroTutorial extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class IntroTutorial extends StatefulWidget {
 }
 
 class _IntroTutorialState extends State<IntroTutorial> {
+  final LocalStorage _storage = new LocalStorage('preferences');
   List<Slide> _slides = new List();
 
   @override
@@ -69,11 +71,12 @@ class _IntroTutorialState extends State<IntroTutorial> {
     return IntroSlider(
       slides: _slides,
       onDonePress: () {
+        _storage.setItem('first_time', false);
         Navigator.pushNamed(context, '/habitats');
-        },
-        styleNameDoneBtn: TextStyle(color: Colors.green[900]),
-        styleNamePrevBtn: TextStyle(color: Colors.green[900]),
-        styleNameSkipBtn: TextStyle(color: Colors.green[900]),
+      },
+      styleNameDoneBtn: TextStyle(color: Colors.green[900]),
+      styleNamePrevBtn: TextStyle(color: Colors.green[900]),
+      styleNameSkipBtn: TextStyle(color: Colors.green[900]),
     );
   }
 }

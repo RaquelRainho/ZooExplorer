@@ -20,20 +20,28 @@ class _HabitatsState extends State<Habitats> {
   Uint8List imageBytes;
   final LocalStorage _storage = new LocalStorage('habitats');
   List<dynamic> _unlockedHabitats = List();
+  bool _id_sorted = false;
 
   //function that launches the scanner
   Future scanQRCode() async {
     String cameraScanResult = await scanner.scan();
-    _unlockedHabitats = _storage.getItem("unlocked") ?? List<String>();
-    _unlockedHabitats.add(cameraScanResult);
-    _storage.setItem("unlocked", _unlockedHabitats).then((value) => setState((){}));
+    if (!_unlockedHabitats.contains(cameraScanResult)){
+      _unlockedHabitats.add(cameraScanResult);
+      _storage.setItem("unlocked", _unlockedHabitats).then((value) => setState((){}));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     List<Habitat> habitats = Provider.of<List<Habitat>>(context);
     _unlockedHabitats = _storage.getItem("unlocked") ?? List<String>();
-    // habitats.sort((a,b) {return _unlockedHabitats.contains(a.id) ? 0 : 1;});
+    _storage.ready.then((value) => setState((){}));
+    if (habitats != null)
+      habitats.sort((a,b) { if (_id_sorted || _unlockedHabitats.contains(a.id) == _unlockedHabitats.contains(b.id))
+                              return int.parse(a.id) - int.parse(b.id);
+                            else if (_unlockedHabitats.contains(a.id))
+                              return -1;
+                            return 1; });
     
     return MaterialApp(
       home: Scaffold(
@@ -52,6 +60,14 @@ class _HabitatsState extends State<Habitats> {
           ),
         backgroundColor: Colors.green[900],
         centerTitle: true,
+        actions: <Widget>[
+          FlatButton(
+            child: Row(
+              children: <Widget>[
+                Icon(_id_sorted ? Icons.filter_1 : Icons.filter, color: Colors.grey[400]),
+                Icon(Icons.filter_list_alt, color: Colors.grey[400],)]),
+            onPressed: (){_id_sorted = !_id_sorted;})
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -88,7 +104,6 @@ class _HabitatsState extends State<Habitats> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: InkWell(
               onTap: () {
-                //Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZooMap(initialPos: habitats[index].location)));
                 _unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index))) : null;
               },
               child: Stack(
@@ -106,7 +121,7 @@ class _HabitatsState extends State<Habitats> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Habitat " + habitats[index].id, style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 26.0, fontWeight: FontWeight.bold),),
-                        Text(_unlockedHabitats.contains(habitats[index].id) ? habitats[index].binName + "s" : "[visit to unlock]", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
+                        Text(_unlockedHabitats.contains(habitats[index].id) ? habitats[index].species + "s" : "[visit to unlock]", style: TextStyle(color: Colors.white, /*backgroundColor: Colors.blue,*/ fontSize: 16.0, fontStyle: FontStyle.italic),),
                       ],
                     ),
                   ),

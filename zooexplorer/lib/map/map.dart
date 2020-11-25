@@ -58,7 +58,7 @@ class _ZooMapState extends State<ZooMap> {
           Marker(markerId: MarkerId(element.id), 
                   position: element.location,
                   infoWindow: InfoWindow(title: "Habitat " + element.id + "\tⓘ", 
-                                          snippet: element.binName + "s", 
+                                          snippet: element.species + "s", 
                                           onTap: (){_unlockedHabitats.contains(element.id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: int.parse(element.id)-1))) : null;}),
                   icon: pinLocationIcon,
                   alpha: _unlockedHabitats.contains(element.id) ? 1.0 : 0.5,

@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           //home: MyStatefulWidget(),
           initialRoute: '/',
           routes: {
-            '/': (context) => MyStatefulWidget(),
+            '/': (context) => Home(),
             '/map': (context) => ZooMap(initialPos: LatLng(40.63191945636097, -8.657524065137872)),
             '/habitats': (context) => Habitats(),
           },
@@ -45,22 +45,34 @@ class MyApp extends StatelessWidget {
 }
 
 /// This is the stateful widget that the main application instantiates.
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+class Home extends StatefulWidget {
+  Home({Key key}) : super(key: key);
 
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _HomeState createState() => _HomeState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+/// This is the private State class that goes with Home.
+class _HomeState extends State<Home> {
   final LocalStorage _storage = new LocalStorage('preferences');
-  bool _firstTime = true;
+  bool _firstTime;
+
+  @override
+  void initState(){
+    super.initState();
+    _storage.ready.then((value) => setState((){
+      _firstTime = _storage.getItem('first_time') ?? true;
+    }));
+  }
   
   @override
   Widget build(BuildContext context) {
-    _firstTime = _storage.getItem('first_time') ?? true;
-    return _firstTime ? IntroTutorial() : Habitats();
+    if (_firstTime == null)
+      return Center(
+              child: CircularProgressIndicator(),
+            );
+    else
+      return _firstTime ? IntroTutorial() : Habitats();
     /*
     return Scaffold(
       body: Center(

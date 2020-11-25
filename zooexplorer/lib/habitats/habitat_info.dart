@@ -6,6 +6,7 @@ import 'package:background_app_bar/background_app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/gallery.dart';
 import 'package:zooexplorer/habitats/info.dart';
+import 'package:zooexplorer/map/map.dart';
 import 'package:zooexplorer/models/habitat.dart';
 
 /* class HabitatInfo extends StatelessWidget {
@@ -115,6 +116,12 @@ ScrollController _controller;
             ),
           backgroundColor: Colors.green[900],
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.pin_drop, color: Colors.grey[400],),
+              onPressed: (){Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZooMap(initialPos: habitats[widget.id].location)));}
+            )
+          ],
         ),
         body: NestedScrollView(
           controller: _controller,
