@@ -12,7 +12,7 @@ import 'package:zooexplorer/services/database.dart';
 import 'image.dart';
 
 class GalleryPage extends StatefulWidget {
-  final int id;
+  final String id;
   GalleryPage({this.id});
 
   @override
@@ -25,11 +25,12 @@ class _GalleryPageState extends State<GalleryPage> {
   Widget build(BuildContext context) {
     Reference storage = Provider.of<Reference>(context);
     List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+    Habitat currentHabitat = habitats.firstWhere((element) => element.id == widget.id);
 
 
     return Scaffold(
       body: FutureBuilder<List<String>>(
-        future: DatabaseService().photos(habitats[widget.id].id),
+        future: DatabaseService().photos(currentHabitat.id),
         builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot){
           if(snapshot.connectionState == ConnectionState.waiting){
             return Center(
@@ -41,7 +42,6 @@ class _GalleryPageState extends State<GalleryPage> {
                 child: Text("Error!"),
               );
             else
-              print("Filepath 1: ${snapshot.data}");
               return Padding(
                 padding: EdgeInsets.all(10.0),
                 child: GridView.builder(
@@ -52,7 +52,7 @@ class _GalleryPageState extends State<GalleryPage> {
                     mainAxisSpacing: 10.0,
                   ),
                   itemBuilder: (context, index){
-                    return ImageGridTile(filePath: snapshot.data[index], id: habitats[widget.id].id,);
+                    return ImageGridTile(filePath: snapshot.data[index], id: currentHabitat.id,);
                   },
                 ),
               );   
@@ -62,7 +62,7 @@ class _GalleryPageState extends State<GalleryPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.photo_camera),
         backgroundColor: Colors.teal[900],
-        onPressed: () => _pickImage(storage, habitats[widget.id]),
+        onPressed: () => _pickImage(storage, currentHabitat),
       ),
     );
   }
@@ -74,9 +74,7 @@ class _GalleryPageState extends State<GalleryPage> {
 
     PickedFile selected = await imagePicker.getImage(source: ImageSource.camera);
     File image = File(selected.path);
-    image.length().then((value) => print("Before compression: $value"));
     File compressedFile = await compressImage(image);
-    compressedFile.length().then((value) => print("After compression: $value"));
 
     _uploadTask = storage.child(filePath).putFile(compressedFile);
     _uploadTask.then((data) => 

@@ -51,7 +51,7 @@ class _HabitatsState extends State<Habitats> {
               child: Row(
                 children: <Widget>[
                   Icon(_id_sorted ? Icons.filter_1 : Icons.filter, color: Colors.grey[400]),
-                  Icon(Icons.filter_list_alt, color: Colors.grey[400],)]),
+                  Icon(Icons.sort, color: Colors.grey[400],)]),
               onPressed: (){ setState((){_id_sorted = !_id_sorted;});})
           ],),
       bottomNavigationBar: bottomNavigationBar(context, 1),
@@ -63,7 +63,7 @@ class _HabitatsState extends State<Habitats> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
             child: InkWell(
               onTap: () {
-                _unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: index))) : null;
+                _unlockedHabitats.contains(habitats[index].id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: habitats[index].id))) : null;
               },
               child: Stack(
                 alignment: Alignment.bottomLeft,

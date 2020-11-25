@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/models/habitat.dart';
@@ -25,7 +26,6 @@ class _ZooMapState extends State<ZooMap> {
   BitmapDescriptor pinLocationIcon;
 
   GoogleMapController _mapController;
-  final LatLng _center = const LatLng(40.633528, -8.657161);
   final double _zoom = 16.5;
   
   @override
@@ -34,6 +34,11 @@ class _ZooMapState extends State<ZooMap> {
     BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/animal-marker.png").then((onValue) {
       pinLocationIcon = onValue;
     });
+    _loadLocation();
+  }
+
+  void _loadLocation() async {
+    await Location().getLocation().then((value) => setState((){}));
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -50,7 +55,7 @@ class _ZooMapState extends State<ZooMap> {
                   position: element.location,
                   infoWindow: InfoWindow(title: "Habitat " + element.id + "\tⓘ", 
                                           snippet: element.species + "s", 
-                                          onTap: (){_unlockedHabitats.contains(element.id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: int.parse(element.id)-1))) : null;}),
+                                          onTap: (){_unlockedHabitats.contains(element.id) ? Navigator.push(this.context, MaterialPageRoute(builder: (context) => HabitatInfo(id: element.id))) : null;}),
                   icon: pinLocationIcon,
                   alpha: _unlockedHabitats.contains(element.id) ? 1.0 : 0.5,
                 ));

@@ -10,7 +10,7 @@ import 'package:zooexplorer/models/habitat.dart';
 import 'package:zooexplorer/widgets/widgets.dart';
 
 class HabitatInfo extends StatefulWidget {
-  final int id;
+  final String id;
 
   HabitatInfo({Key key, this.id}) : super(key: key);
 
@@ -82,6 +82,7 @@ ScrollController _controller;
   @override
   Widget build(BuildContext context) {
     List<Habitat> habitats = Provider.of<List<Habitat>>(context);
+    Habitat currentHabitat = habitats.firstWhere((element) => element.id == widget.id);
 
     return MaterialApp(
       theme: ThemeData(
@@ -92,7 +93,7 @@ ScrollController _controller;
           <Widget>[
               IconButton(
                 icon: Icon(Icons.pin_drop, color: Colors.grey[400],),
-                onPressed: (){Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZooMap(initialPos: habitats[widget.id].location)));}
+                onPressed: (){Navigator.push(this.context, MaterialPageRoute(builder: (context) => ZooMap(initialPos: currentHabitat.location)));}
               )
             ]),
         body: NestedScrollView(
@@ -105,7 +106,7 @@ ScrollController _controller;
                   floating: false,
                   snap: false,
                   flexibleSpace: BackgroundFlexibleSpaceBar(
-                        title: Text( "Habitat " + "${habitats[widget.id].id}" ),
+                        title: Text( "Habitat " + "${currentHabitat.id}" ),
                         centerTitle: true,
                         titlePadding: const EdgeInsets.only(left: 20.0, bottom: 20.0),
                         background: ClipRect(
@@ -114,7 +115,7 @@ ScrollController _controller;
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(
-                                            habitats[widget.id].imageUrl,
+                                            currentHabitat.imageUrl,
                                         ),
                                         fit: BoxFit.fitWidth
                           )
