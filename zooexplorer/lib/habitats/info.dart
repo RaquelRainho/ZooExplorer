@@ -166,7 +166,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text(habitats[id].matAge.toString(), textAlign: TextAlign.center,
+                        child: Text(habitats[id].matAge.toString() + " months", textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -180,7 +180,7 @@ class InfoPage extends StatelessWidget {
                     ),
                     Container(
                         padding: EdgeInsets.all(10),
-                        child: Text(habitats[id].gestPeriod.toString(), textAlign: TextAlign.center,
+                        child: Text(habitats[id].gestPeriod.toString() + " months", textAlign: TextAlign.center,
                       ),
                     ),
                     ]
@@ -232,14 +232,14 @@ class InfoPage extends StatelessWidget {
                               children: [
                                 Row(children: [
                                 Icon(Custom.female, color: Colors.pink, size: 20,),
-                                Text(habitats[id].f_size.toString(),),
+                                Text(habitats[id].f_size.toString() + " m",),
                                 ],)
                             ]),
                             Column(
                               children: [
                                 Row(children: [
                                 Icon(Custom.male, color: Colors.blue, size: 20,),
-                                Text(habitats[id].m_size.toString(),)],
+                                Text(" " + habitats[id].m_size.toString() + " m",)],
                                 )],
                               ),
                           ]),
@@ -263,14 +263,14 @@ class InfoPage extends StatelessWidget {
                               children: [
                                 Row(children: [
                                 Icon(Custom.female, color: Colors.pink, size: 20,),
-                                Text(habitats[id].f_lifeExpectancy.toString(),),
+                                Text(habitats[id].f_lifeExpectancy.toString() + " years",),
                                 ],)
                             ]),
                             Column(
                               children: [
                                 Row(children: [
                                 Icon(Custom.male, color: Colors.blue, size: 20,),
-                                Text(habitats[id].m_lifeExpectancy.toString(),)],
+                                Text(" " + habitats[id].m_lifeExpectancy.toString() + " years",)],
                                 )],
                               ),
                           ]),
@@ -294,14 +294,14 @@ class InfoPage extends StatelessWidget {
                               children: [
                                 Row(children: [
                                 Icon(Custom.female, color: Colors.pink, size: 20,),
-                                Text(habitats[id].f_weight.toString(),),
+                                Text(habitats[id].f_weight.toString() + " kg",),
                                 ],)
                             ]),
                             Column(
                               children: [
                                 Row(children: [
                                 Icon(Custom.male, color: Colors.blue, size: 20,),
-                                Text(habitats[id].m_weight.toString(),)],
+                                Text(" " + habitats[id].m_weight.toString() + " kg",)],
                                 )],
                               ),
                           ]),
