@@ -117,7 +117,6 @@ class _ImageGridTileState extends State<ImageGridTile> {
   Reference photosReference = FirebaseStorage.instance.ref();
 
   getImage(){
-    print("-------- Filepath: ${widget.filePath}");
     photosReference.child("${widget.filePath}").getData(100000000).then((data){
       this.setState(() {
         imageFile = data;

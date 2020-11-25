@@ -51,7 +51,6 @@ class DatabaseService {
     return storRef.listAll().then((ListResult list){
         return list.items.map((Reference ref){
             return ref.fullPath;
-            //print(ref.fullPath);
           }
         ).toList();
       }

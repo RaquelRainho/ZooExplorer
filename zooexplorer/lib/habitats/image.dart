@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:zooexplorer/widgets/widgets.dart';
 
 class ZoomImage extends StatelessWidget {
   final Uint8List img;
@@ -13,22 +14,7 @@ class ZoomImage extends StatelessWidget {
     return GestureDetector(
           onTap: (){Navigator.pop(context);},
           child: Scaffold(
-            appBar: AppBar(
-          title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                    Image.asset(
-                  'assets/logo_short2.png',
-                    fit: BoxFit.contain,
-                    height: 48,
-                ),
-                Container(
-                    padding: const EdgeInsets.all(8.0), child: Text('Zoo Explorer'))
-              ],
-            ),
-          backgroundColor: Colors.green[900],
-          centerTitle: true,
-        ),
+            appBar: appbar([]),
             body: Stack(
               children: [
                 BackdropFilter(

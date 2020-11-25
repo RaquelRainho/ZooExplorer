@@ -5,16 +5,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/models/habitat.dart';
-
-/*
-class ZooMap extends StatelessWidget {
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ZooMapPage(),
-    );
-  }
-}
-*/
+import 'package:zooexplorer/widgets/widgets.dart';
 
 class ZooMap extends StatefulWidget {
   final LatLng initialPos;
@@ -72,50 +63,8 @@ class _ZooMapState extends State<ZooMap> {
     _habitats = Provider.of<List<Habitat>>(context);
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-        title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                  Image.asset(
-                 'assets/logo_short2.png',
-                  fit: BoxFit.contain,
-                  height: 48,
-              ),
-              Container(
-                  padding: const EdgeInsets.all(8.0), child: Text('Zoo Explorer'))
-            ],
-          ),
-        backgroundColor: Colors.green[900],
-        centerTitle: true,
-
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.pin_drop),
-            label: 'Map',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list_alt),
-            label: 'Habitats'
-          ),
-        ],
-        selectedItemColor: Colors.green[600],
-        currentIndex: 0,
-        onTap: (int index) {
-          setState(() {
-            switch(index) {
-              case 0: //Map
-                      Navigator.pushNamed(context, '/map');
-                      break;
-              case 1: //Habitats
-                      Navigator.pushNamed(context, '/habitats');
-                      break;
-            }
-          });
-        },
-      ),
+        appBar: appbar([]),
+      bottomNavigationBar: bottomNavigationBar(context, 0),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(

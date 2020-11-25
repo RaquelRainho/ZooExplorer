@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:zooexplorer/habitats/habitat_info.dart';
 import 'package:zooexplorer/habitats/habitats.dart';
 import 'package:zooexplorer/intro/intro_slider.dart';
 import 'package:zooexplorer/map/map.dart';
@@ -73,31 +71,5 @@ class _HomeState extends State<Home> {
             );
     else
       return _firstTime ? IntroTutorial() : Habitats();
-    /*
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Image.asset('assets/logo.png'),
-            ),
-            RaisedButton(
-              child: Text(
-                'Start', 
-                style: TextStyle(fontSize: 25),),
-              color: Colors.green[900],
-              textColor: Colors.grey[350],
-              onPressed: () {
-                Navigator.pushNamed(context, '/habitats');
-                },
-            ),
-          ],
-        ),
-      )
-    );
-    */
   }
 }
